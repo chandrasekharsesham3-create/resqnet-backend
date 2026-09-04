@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>RESQNET | Rescue Center</title>
+
+
+    <!-- RESQNET CSS -->
+
+    <link
+            rel="stylesheet"
+            href="css/style.css"
+    >
+
+
+    <!-- LEAFLET MAP CSS -->
+
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =========================================
+         SIDEBAR
+    ========================================== -->
+
+    <aside class="sidebar">
+
+
+        <!-- BRAND -->
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                R
+            </div>
+
+            <div>
+
+                <h1>
+                    RESQNET
+                </h1>
+
+                <span>
+                    RESCUE NETWORK
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- RESCUE CENTER -->
+
+        <div class="center-profile">
+
+            <div class="profile-icon">
+                🚑
+            </div>
+
+            <div>
+
+                <strong>
+                    Central Rescue Center
+                </strong>
+
+                <small>
+                    ONLINE
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav>
+
+
+            <button
+                    class="nav-item active"
+                    onclick="showPage('dashboard', this)"
+            >
+
+                <span>
+                    ▣
+                </span>
+
+                Dashboard
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    onclick="showPage('alerts', this)"
+            >
+
+                <span>
+                    🚨
+                </span>
+
+                SOS Alerts
+
+                <b
+                        class="badge"
+                        id="sosBadge"
+                >
+                    0
+                </b>
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    onclick="showPage('map', this)"
+            >
+
+                <span>
+                    ⌖
+                </span>
+
+                Emergency Map
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    onclick="showPage('active', this)"
+            >
+
+                <span>
+                    ↗
+                </span>
+
+                Active Responses
+
+            </button>
+
+
+            <button
+                    class="nav-item"
+                    onclick="showPage('resolved', this)"
+            >
+
+                <span>
+                    ✓
+                </span>
+
+                Resolved
+
+            </button>
+
+
+        </nav>
+
+
+    </aside>
+
+
+
+    <!-- =========================================
+         MAIN CONTENT
+    ========================================== -->
+
+    <main class="main">
+
+
+        <!-- =========================================
+             TOP BAR
+        ========================================== -->
+
+        <header class="topbar">
+
+
+            <div>
+
+                <span class="breadcrumb">
+                    RESQNET /
+                </span>
+
+                <strong id="pageTitle">
+                    Dashboard
+                </strong>
+
+            </div>
+
+
+            <div class="top-actions">
+
+
+                <!-- CONNECTION -->
+
+                <div class="connection">
+
+                    <span class="online-dot"></span>
+
+                    System Online
+
+                </div>
+
+
+                <!-- NOTIFICATIONS -->
+
+                <button
+                        class="notification"
+                        type="button"
+                >
+
+                    🔔
+
+                    <span id="notificationCount">
+                        0
+                    </span>
+
+                </button>
+
+
+                <!-- USER -->
+
+                <div class="user">
+
+                    <div class="avatar">
+                        RC
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Rescue Officer
+                        </strong>
+
+                        <small>
+                            Dispatcher
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================
+             DASHBOARD
+        ========================================== -->
+
+        <section
+                id="dashboard"
+                class="page active-page"
+        >
+
+
+            <div class="page-heading">
+
+
+                <div>
+
+                    <h2>
+                        Emergency Response Dashboard
+                    </h2>
+
+                    <p>
+                        Monitor and respond to emergency alerts
+                        in your coverage area.
+                    </p>
+
+                </div>
+
+
+                <div
+                        class="current-time"
+                        id="currentTime"
+                ></div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 STAT CARDS
+            ====================================== -->
+
+            <div class="stats">
+
+
+                <!-- NEW SOS -->
+
+                <div class="stat-card danger">
+
+                    <div class="stat-icon">
+                        🚨
+                    </div>
+
+                    <div>
+
+                        <span>
+                            New SOS
+                        </span>
+
+                        <strong id="statNewSOS">
+                            0
+                        </strong>
+
+                        <small>
+                            Requires attention
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTIVE RESPONSES -->
+
+                <div class="stat-card warning">
+
+                    <div class="stat-icon">
+                        ↗
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Active Responses
+                        </span>
+
+                        <strong id="statActive">
+                            0
+                        </strong>
+
+                        <small>
+                            Currently responding
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- RESOLVED -->
+
+                <div class="stat-card success">
+
+                    <div class="stat-icon">
+                        ✓
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Resolved Today
+                        </span>
+
+                        <strong id="statResolved">
+                            0
+                        </strong>
+
+                        <small>
+                            Completed emergencies
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- NEARBY -->
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">
+                        ⌖
+                    </div>
+
+                    <div>
+
+                        <span>
+                            Nearby Alerts
+                        </span>
+
+                        <strong id="statNearby">
+                            0
+                        </strong>
+
+                        <small>
+                            Within coverage area
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 CONTENT GRID
+            ====================================== -->
+
+            <div class="content-grid">
+
+
+                <!-- =================================
+                     SOS TABLE
+                ================================== -->
+
+                <div class="panel large-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <h3>
+                                Recent SOS Alerts
+                            </h3>
+
+                            <p>
+                                Latest emergency requests
+                            </p>
+
+                        </div>
+
+
+                        <button
+                                class="view-button"
+                                onclick="showPage('alerts')"
+                        >
+                            View All
+                        </button>
+
+
+                    </div>
+
+
+
+                    <div class="table-container">
+
+
+                        <table>
+
+
+                            <thead>
+
+                            <tr>
+
+                                <th>
+                                    SOS
+                                </th>
+
+                                <th>
+                                    Emergency
+                                </th>
+
+                                <th>
+                                    People
+                                </th>
+
+                                <th>
+                                    Location
+                                </th>
+
+                                <th>
+                                    Distance
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    Action
+                                </th>
+
+                            </tr>
+
+                            </thead>
+
+
+
+                            <tbody id="recentSOSBody">
+
+                            </tbody>
+
+
+                        </table>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =================================
+                     PRIORITY ALERT
+                ================================== -->
+
+                <div class="panel priority-panel">
+
+
+                    <div class="panel-header">
+
+
+                        <div>
+
+                            <h3>
+                                Priority Alert
+                            </h3>
+
+                            <p>
+                                Requires immediate response
+                            </p>
+
+                        </div>
+
+
+                        <span class="priority-dot"></span>
+
+
+                    </div>
+
+
+
+                    <div
+                            class="priority-content"
+                            id="priorityContent"
+                    >
+
+                        <div class="priority-number">
+                            No Active Priority Alert
+                        </div>
+
+                        <h4>
+                            Waiting for SOS
+                        </h4>
+
+                        <p>
+                            New emergency alerts will appear here.
+                        </p>
+
+
+                        <div class="location">
+
+
+                            <span>
+                                ⌖
+                            </span>
+
+
+                            <div>
+
+                                <strong>
+                                    No alert
+                                </strong>
+
+                                <small>
+                                    Waiting for emergency
+                                </small>
+
+                            </div>
+
+
+                        </div>
+
+
+                        <button
+                                class="respond-button"
+                                id="priorityRespondButton"
+                                onclick="openPrioritySOS()"
+                                style="display:none;"
+                        >
+                            RESPOND TO SOS
+                        </button>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 NETWORK STATUS
+            ====================================== -->
+
+            <div class="panel system-panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <h3>
+                            RESQNET Network Status
+                        </h3>
+
+                        <p>
+                            Current rescue network health
+                        </p>
+
+                    </div>
+
+
+                    <span class="status online">
+                        ALL SYSTEMS OPERATIONAL
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="network-items">
+
+
+                    <div>
+
+                        <span class="network-dot"></span>
+
+                        <strong>
+                            SOS Network
+                        </strong>
+
+                        <small>
+                            Operational
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="network-dot"></span>
+
+                        <strong>
+                            Location Services
+                        </strong>
+
+                        <small>
+                            Operational
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="network-dot"></span>
+
+                        <strong>
+                            Rescue Network
+                        </strong>
+
+                        <small>
+                            12 centers online
+                        </small>
+
+                    </div>
+
+
+                    <div>
+
+                        <span class="network-dot"></span>
+
+                        <strong>
+                            Database
+                        </strong>
+
+                        <small>
+                            Operational
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             SOS ALERTS
+        ========================================== -->
+
+        <section
+                id="alerts"
+                class="page"
+        >
+
+
+            <div class="page-heading">
+
+
+                <div>
+
+                    <h2>
+                        SOS Alerts
+                    </h2>
+
+                    <p>
+                        Emergency requests received by RESQNET.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <h3>
+                            All Emergency Alerts
+                        </h3>
+
+                        <p>
+                            Sorted by most recent
+                        </p>
+
+                    </div>
+
+
+                    <button
+                            class="view-button"
+                            onclick="loadSOSData()"
+                    >
+                        Refresh
+                    </button>
+
+
+                </div>
+
+
+
+                <div
+                        class="alert-list"
+                        id="alertList"
+                ></div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             EMERGENCY MAP
+        ========================================== -->
+
+        <section
+                id="map"
+                class="page"
+        >
+
+
+            <div class="page-heading">
+
+
+                <div>
+
+                    <h2>
+                        Emergency Map
+                    </h2>
+
+                    <p>
+                        Monitor emergency locations and rescue coverage.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div
+                    id="resqnetMap"
+                    style="
+                    width: 100%;
+                    height: 600px;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    border: 1px solid #e5e7eb;
+                "
+            ></div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             ACTIVE RESPONSES
+        ========================================== -->
+
+        <section
+                id="active"
+                class="page"
+        >
+
+
+            <div class="page-heading">
+
+
+                <div>
+
+                    <h2>
+                        Active Responses
+                    </h2>
+
+                    <p>
+                        Emergency responses currently in progress.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div
+                    class="panel"
+                    id="activeResponsePanel"
+            >
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <h3>
+                            Active Rescue Operations
+                        </h3>
+
+                        <p>
+                            Emergency responses currently being handled.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div
+                        id="activeResponseList"
+                        class="response-list"
+                ></div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================================
+             RESOLVED
+        ========================================== -->
+
+        <section
+                id="resolved"
+                class="page"
+        >
+
+
+            <div class="page-heading">
+
+
+                <div>
+
+                    <h2>
+                        Resolved Emergencies
+                    </h2>
+
+                    <p>
+                        Previously completed rescue operations.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div
+                    class="panel"
+                    id="resolvedPanel"
+            >
+
+
+                <div class="panel-header">
+
+
+                    <div>
+
+                        <h3>
+                            Resolved SOS
+                        </h3>
+
+                        <p>
+                            Completed emergency responses.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div
+                        id="resolvedList"
+                        class="response-list"
+                ></div>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</div>
+
+
+
+<!-- =========================================
+     SOS MODAL
+========================================= -->
+
+<div
+        id="sosModal"
+        class="modal"
+>
+
+
+    <div class="modal-box">
+
+
+        <button
+                class="close-button"
+                onclick="closeSOS()"
+        >
+            ×
+        </button>
+
+
+
+        <div class="modal-header">
+
+
+            <div class="modal-alert-icon">
+                🚨
+            </div>
+
+
+            <div>
+
+                <span>
+                    EMERGENCY ALERT
+                </span>
+
+                <h2 id="modalSOSId">
+                    SOS
+                </h2>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="modal-details">
+
+
+            <div class="detail">
+
+                <span>
+                    Emergency Type
+                </span>
+
+                <strong id="modalType">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span>
+                    People
+                </span>
+
+                <strong id="modalPeople">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span>
+                    Location
+                </span>
+
+                <strong id="modalLocation">
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="detail">
+
+                <span>
+                    Distance
+                </span>
+
+                <strong id="modalDistance">
+                    -
+                </strong>
+
+            </div>
+
+
+        </div>
+
+
+
+        <div class="description">
+
+
+            <span>
+                Description
+            </span>
+
+
+            <p id="modalDescription">
+                -
+            </p>
+
+
+        </div>
+
+
+
+        <div class="modal-actions">
+
+
+            <button
+                    class="secondary-button"
+                    onclick="closeSOS()"
+            >
+                CLOSE
+            </button>
+
+
+            <button
+                    class="respond-button"
+                    id="acceptSOSButton"
+                    onclick="acceptSOS()"
+            >
+                ACCEPT & DISPATCH
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =========================================
+     LEAFLET JAVASCRIPT
+========================================= -->
+
+<script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+
+<!-- RESQNET JAVASCRIPT -->
+
+<script src="js/app.js"></script>
+
+
+</body>
+
+</html>
