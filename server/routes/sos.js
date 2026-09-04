@@ -3,6 +3,48 @@ const pool = require("../config/database");
 
 const router = express.Router();
 
+// Get all SOS alerts
+router.get("/", async (req, res) => {
+    try {
+        const result = await pool.query(
+            `
+            SELECT
+                s.id,
+                s.sos_id,
+                s.latitude,
+                s.longitude,
+                s.people_count,
+                s.emergency_type,
+                s.description,
+                s.priority,
+                s.status,
+                s.created_at,
+                s.accepted_at,
+                s.resolved_at,
+                d.device_id,
+                d.device_name
+            FROM sos_alerts s
+            JOIN devices d ON d.id = s.device_id
+            ORDER BY s.created_at DESC
+            `
+        );
+
+        res.json({
+            success: true,
+            sos: result.rows
+        });
+
+    } catch (error) {
+        console.error("SOS fetch error:", error);
+
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch SOS alerts"
+        });
+    }
+});
+
+// Create SOS alert
 router.post("/", async (req, res) => {
     try {
         const {
